@@ -45,14 +45,11 @@ def update_hotel(hotel_id: int, title: str = Body(), name: str = Body()):
 @app.patch("/hotels/{hotel_id}")
 def update_hotel_(hotel_id: int, title: str | None = Body(None), name: str | None = Body(None)):
     global hotels
-    if title or name:
-        for hotel in hotels:
-            if hotel["id"] == hotel_id:
-                if title and name:
-                    hotel["title"] = title
-                    hotel["name"] = name
-                if title:
-                    hotel["title"] = title
+
+    for hotel in hotels:
+        if hotel["id"] == hotel_id:
+            if title:
+                hotel["title"] = title
                 if name:
                     hotel["name"] = name
     return {"status": "OK"}

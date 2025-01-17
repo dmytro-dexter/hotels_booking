@@ -4,8 +4,13 @@ from schemas.hotels import Hotel, HotelPATCH
 router = APIRouter(prefix="/hotels", tags=["Hotels"])
 
 hotels = [
-    {"id": 1, "title": "Sumy", "name": "sumy"},
-    {"id": 2, "title": "Kyiv", "name": "kyiv"},
+    {"id": 1, "title": "Sumy", "name": "Суми"},
+    {"id": 2, "title": "Kyiv", "name": "Київ"},
+    {"id": 3, "title": "Lviv", "name": "Львів"},
+    {"id": 4, "title": "Konotop", "name": "Конотоп"},
+    {"id": 5, "title": "Dnipro", "name": "Дніпро"},
+    {"id": 6, "title": "Odesa", "name": "Одеса"},
+    {"id": 7, "title": "Frankivsk", "name": "Франківськ"},
 ]
 
 
@@ -13,10 +18,17 @@ hotels = [
 def get_hotels(
         id: int | None = Query(None, description="ID of the hotel"),
         title: str | None = Query(None, description="Hotel name"),
+        page: int | None = Query(None),
+        per_page: int | None = Query(2),
 ):
+    start_index = (page - 1) * per_page
+    end_index = start_index + per_page
     if id or title:
-        return [hotel for hotel in hotels if hotel["id"] == id or hotel["title"] == title]
-    return hotels
+        filtered_hotels = [hotel for hotel in hotels if hotel["id"] == id or hotel["title"] == title]
+
+        return filtered_hotels[start_index:end_index]
+
+    return hotels[start_index:end_index]
 
 
 @router.post("/")
